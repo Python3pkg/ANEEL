@@ -1,5 +1,6 @@
 import csv
 import json
+import datetime
 
 
 class CompensationContinuityConsumer:
@@ -44,8 +45,8 @@ class CompensationContinuityConsumer:
     __yearly_value_compensation = [0.0] * 1
     __yearly_indicator_compensation = ["NA"] * 1
 
-    def __init__(self, code_consumer, year, type_tension, type_area, type_system, code_conjunt, dic_h, fic, dmic_h,
-                 eusd_rs):
+    def set_features(self, code_consumer, year, type_tension, type_area, type_system, code_conjunt, dic_h, fic, dmic_h,
+                     eusd_rs):
         self.__code_consumer = code_consumer
         self.__year = year
         self.__type_tension = type_tension
@@ -360,7 +361,8 @@ class CompensationContinuityConsumer:
         return dic_fic_dmic_limits
 
     def __set_dic_fic_dmic_limits(self):
-        temp = CompensationContinuityConsumer.get_dic_fic_dmic_limits(self.__code_conjunt, self.__year, self.__type_tension,
+        temp = CompensationContinuityConsumer.get_dic_fic_dmic_limits(self.__code_conjunt, self.__year,
+                                                                      self.__type_tension,
                                                                       self.__type_area, self.__type_system)
         self.__limit_dic_yearly_h = temp[0]
         self.__limit_dic_quartely_h = temp[1]
@@ -527,25 +529,61 @@ class CompensationContinuityConsumer:
         return json.dumps(self.__dict__, sort_keys=True, indent=2)
 
 
-class calculateCompensation:
-    database = []
+class CalculateCompensation:
+    __csv_path_file = ""
+    __content_file = []
+    __data_base = []
+    __calculator = CompensationContinuityConsumer()
 
-    def __init__(self, csvpathfile):
-        with open(csvpathfile, "rt") as csvpathfile:
-            self.database = list(csv.reader(csvpathfile, delimiter=";", quotechar="\""))
+    def set_csv_path_file(self, csv_path_file):
+        self.__csv_path_file = csv_path_file
+        with open(self.__csv_path_file, "rt") as temp:
+            self.__content_file = list(csv.reader(temp, delimiter=";", quotechar="\""))
+        self.__ajust_data()
+        self.__execute_calculations()
 
-    def printData(self):
-        for linha in self.database:
-            for coluna in linha:
-                print("{}".format(coluna))
+    def __ajust_data(self):
+        for i, value in enumerate(self.__content_file):
+            if i > 0:
+                temp = [value[0], int(value[1]), value[2], value[3], value[4], int(value[5]),
+                        [float(j) for j in value[6:18]], [float(j) for j in value[18:30]],
+                        [float(j) for j in value[30:42]], [float(j) for j in value[42:54]]]
+                self.__data_base.append(temp)
+
+    def __execute_calculations(self):
+        for i, value in enumerate(self.__data_base):
+            self.__calculator.set_features(value[0], value[1], value[2], value[3], value[4], value[5], value[6],
+                                           value[7], value[8], value[9])
+
+    def write_result(self):
+        temp01 = self.__csv_path_file
+        temp02 = datetime.datetime.now().__str__().replace(" ","-").replace(":","-").replace(".","-")
+        with open(temp01.replace(".csv", "{}.csv".format(temp02)), "wt") as csv_file:
+            temp03 = csv.writer(csv_file, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
+            for linha in self.__data_base:
+                temp03.writerow(linha[:6]+linha[6][:]+linha[7][:]+linha[8][:]+linha[9][:])
+
+    def print_data(self):
+        for linha in self.__data_base:
+            # for linha in self.__data_base:
+            print(linha)
+            # for coluna in linha:
+            # print("{}".format(coluna))
 
 
 if __name__ == "__main__":
-    mycal = CompensationContinuityConsumer("abc", 2016, "BT", "URB", "INT", 1111, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                                           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                                           [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
-    print(mycal)
-    print(CompensationContinuityConsumer.get_dec_fec_limits(1111, 2016))
-    print(CompensationContinuityConsumer.get_kei("BT"))
-    print(CompensationContinuityConsumer.get_table("BT", "URB", "INT"))
-    print(CompensationContinuityConsumer.get_dic_fic_dmic_limits(1111, 2016, "BT", "URB", "INT"))
+    print(datetime.datetime.now().__str__().replace(" ","-").replace(":","-").replace(".","-"))
+    # my_consumer = CompensationContinuityConsumer()
+    # my_consumer.set_features("abc", 2016, "BT", "URB", "INT", 1111, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    #                          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    #                          [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
+    # print(my_consumer)
+    # print(CompensationContinuityConsumer.get_dec_fec_limits(1111, 2016))
+    # print(CompensationContinuityConsumer.get_kei("BT"))
+    # print(CompensationContinuityConsumer.get_table("BT", "URB", "INT"))
+    # print(CompensationContinuityConsumer.get_dic_fic_dmic_limits(1111, 2016, "BT", "URB", "INT"))
+    my_file = CalculateCompensation()
+    my_file.set_csv_path_file("dados.csv")
+    my_file.write_result()
+    # my_file.print_data()
+    print(datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-"))
