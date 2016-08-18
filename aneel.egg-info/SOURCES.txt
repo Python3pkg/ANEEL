@@ -1,0 +1,8 @@
+README.rst
+setup.py
+aneel/__init__.py
+aneel.egg-info/PKG-INFO
+aneel.egg-info/SOURCES.txt
+aneel.egg-info/dependency_links.txt
+aneel.egg-info/requires.txt
+aneel.egg-info/top_level.txt

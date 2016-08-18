@@ -1,5 +1,10 @@
 import csv
 import json
+import datetime
+
+"""
+Criação de módulo que calcula as compensações de continuidade à consumidores.
+"""
 
 
 class CompensationContinuityConsumer:
@@ -44,8 +49,8 @@ class CompensationContinuityConsumer:
     __yearly_value_compensation = [0.0] * 1
     __yearly_indicator_compensation = ["NA"] * 1
 
-    def __init__(self, code_consumer, year, type_tension, type_area, type_system, code_conjunt, dic_h, fic, dmic_h,
-                 eusd_rs):
+    def set_features(self, code_consumer, year, type_tension, type_area, type_system, code_conjunt, dic_h, fic, dmic_h,
+                     eusd_rs):
         self.__code_consumer = code_consumer
         self.__year = year
         self.__type_tension = type_tension
@@ -360,7 +365,8 @@ class CompensationContinuityConsumer:
         return dic_fic_dmic_limits
 
     def __set_dic_fic_dmic_limits(self):
-        temp = CompensationContinuityConsumer.get_dic_fic_dmic_limits(self.__code_conjunt, self.__year, self.__type_tension,
+        temp = CompensationContinuityConsumer.get_dic_fic_dmic_limits(self.__code_conjunt, self.__year,
+                                                                      self.__type_tension,
                                                                       self.__type_area, self.__type_system)
         self.__limit_dic_yearly_h = temp[0]
         self.__limit_dic_quartely_h = temp[1]
@@ -527,25 +533,15 @@ class CompensationContinuityConsumer:
         return json.dumps(self.__dict__, sort_keys=True, indent=2)
 
 
-class calculateCompensation:
-    database = []
-
-    def __init__(self, csvpathfile):
-        with open(csvpathfile, "rt") as csvpathfile:
-            self.database = list(csv.reader(csvpathfile, delimiter=";", quotechar="\""))
-
-    def printData(self):
-        for linha in self.database:
-            for coluna in linha:
-                print("{}".format(coluna))
-
-
 if __name__ == "__main__":
-    mycal = CompensationContinuityConsumer("abc", 2016, "BT", "URB", "INT", 1111, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                                           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                                           [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
-    print(mycal)
+    print(datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-"))
+    my_consumer = CompensationContinuityConsumer()
+    my_consumer.set_features("abc", 2016, "BT", "URB", "INT", 1111, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                             [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
+    print(my_consumer)
     print(CompensationContinuityConsumer.get_dec_fec_limits(1111, 2016))
     print(CompensationContinuityConsumer.get_kei("BT"))
     print(CompensationContinuityConsumer.get_table("BT", "URB", "INT"))
     print(CompensationContinuityConsumer.get_dic_fic_dmic_limits(1111, 2016, "BT", "URB", "INT"))
+    print(datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-"))
