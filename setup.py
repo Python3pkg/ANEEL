@@ -1,30 +1,20 @@
 # -*- coding: utf-8 -*-
-import setuptools
-import textwrap
+from setuptools import setup
 
-setuptools.setup(
-    name="aneel",
-    version="0.0.4",
-    url="https://github.com/renatoefsousa/ANEEL",
-    license="MIT License",
-    author="Renato Eduardo Farias de Sousa",
-    author_email="renato.ef.sousa@gmail.com",
-    long_description=textwrap.dedent("""\
-            (Very short) Tutorial
-            =====================
-            First create a variable::
-                my_consumer = CompensationContinuityConsumer()
-            Adjust the class parameters::
-                my_consumer.set_features("abc", 2016, "BT", "URB", "INT", 1111, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-                             [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
-            Then write the result::
-                print(my_consumer)
-            Reference documentation
-            =======================
-            See https://github.com/renatoefsousa/ANEEL"""),
-    keywords="aneel cálculos regulamentos",
-    description=u"This package performs various calculations related to ANEEL regulations.",
-    packages=["aneel"],
-    install_requires=["csv", "json"],
+def readme():
+    with open('README.rst') as f:
+        return f.read()
+
+setup(name="aneel",
+      version="0.0.7",
+      url="https://github.com/renatoefsousa/ANEEL",
+      license="MIT License",
+      author="Renato Eduardo Farias de Sousa",
+      author_email="renato.ef.sousa@gmail.com",
+      long_description=readme(),
+      keywords="aneel calculations regulations",
+      packages=["aneel"],
+      description=u"This package performs various calculations related to ANEEL regulations.",
+      install_requires=["csv", "json", "datetime"],
+      include_package_data=True
 )
