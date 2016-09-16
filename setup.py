@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 setup(name="aneel",
-      version="0.0.6",
+      version="0.0.7",
       url="https://github.com/renatoefsousa/ANEEL",
       license="MIT License",
       author="Renato Eduardo Farias de Sousa",
