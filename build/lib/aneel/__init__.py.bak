@@ -90069,18 +90069,18 @@ class CalculateCompensationCSV:
 
 
 if __name__ == "__main__":
-    print((datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-")))
+    print(datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-"))
     my_consumer = CompensationContinuityConsumer()
     my_consumer.set_features("abc", 2005, "BT", "URB", "INT", 327, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
                              [40, 42, 43, 44, 45, 56, 47, 38, 49, 40, 51, 62])
     print(my_consumer)
-    print((CompensationContinuityConsumer.get_dec_fec_limits(1111, 2016)))
-    print((CompensationContinuityConsumer.get_kei("BT")))
-    print((CompensationContinuityConsumer.get_table("BT", "URB", "INT")))
-    print((CompensationContinuityConsumer.get_dic_fic_dmic_limits(1111, 2016, "BT", "URB", "INT")))
+    print(CompensationContinuityConsumer.get_dec_fec_limits(1111, 2016))
+    print(CompensationContinuityConsumer.get_kei("BT"))
+    print(CompensationContinuityConsumer.get_table("BT", "URB", "INT"))
+    print(CompensationContinuityConsumer.get_dic_fic_dmic_limits(1111, 2016, "BT", "URB", "INT"))
     my_file = CalculateCompensationCSV()
     my_file.set_csv_path_file("dados.csv")
     my_file.write_result()
     my_file.print_data()
-    print((datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-")))
+    print(datetime.datetime.now().__str__().replace(" ", "-").replace(":", "-").replace(".", "-"))
